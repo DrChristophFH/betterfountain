@@ -347,6 +347,20 @@ function updateStats(){
             default:        return data
         }
     };
+    let renderGender = function(data, type, row) {
+      switch (type) {
+          case "display":
+              return `<select class="gender-select" data-character-id="${row.id}">
+                          <option value="Male" ${data === 'Male' ? 'selected' : ''}>Male</option>
+                          <option value="Female" ${data === 'Female' ? 'selected' : ''}>Female</option>
+                          <option value="Other" ${data === 'Other' ? 'selected' : ''}>Other</option>
+                      </select>`;
+          case "sort":
+              return data;
+          default:
+              return data;
+      }
+    };
     let characterTable = TableChart.render("#characterStats-table", {
         data: state.stats.characterStats.characters,
         unit:"characters",
@@ -356,7 +370,8 @@ function updateStats(){
             { data:'speakingParts', name:"lines", title:"Lines", render:renderInvert },
             { data:'wordsSpoken', name:"words", title:"Words", render:renderInvert },
             { data:'averageComplexity', name:"complexity", title:"Complexity", render:renderComplexity},
-            { data:'monologues', name:"monologues", title:"Monologues", render:renderInvert }
+            { data:'monologues', name:"monologues", title:"Monologues", render:renderInvert },
+            { data: 'gender', name: 'gender', title: 'Gender', render: renderGender }
         ],
         createdRow:function(row,data,dataIndex){
             if(data.color){
