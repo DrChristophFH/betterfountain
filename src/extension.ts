@@ -211,10 +211,10 @@ vscode.workspace.onDidChangeConfiguration(change => {
   }
 })
 
-export var parsedDocuments = new Map<string, afterparser.parseoutput>();
+export var parsedDocuments = new Map<string, afterparser.Script>();
 let lastParsedUri = "";
 
-export function activeParsedDocument(): afterparser.parseoutput {
+export function activeParsedDocument(): afterparser.Script {
   var texteditor = getEditor(getActiveFountainDocument());
   if (texteditor) {
     return parsedDocuments.get(texteditor.document.uri.toString());
@@ -250,7 +250,6 @@ export function parseDocument(document: TextDocument) {
   let previewsToUpdate = getPreviewsToUpdate(document.uri)
   let output = afterparser.parse(document.getText(), getFountainConfig(document.uri), previewsToUpdate.length > 0)
 
-
   if (previewsToUpdate) {
     //lastFountainDocument = document;
     for (let i = 0; i < previewsToUpdate.length; i++) {
@@ -264,18 +263,19 @@ export function parseDocument(document: TextDocument) {
       }
     }
   }
+
   lastParsedUri = document.uri.toString();
   parsedDocuments.set(lastParsedUri, output);
-  var tokenlength = 0;
+  let tokenlength = 0;
   const decorsDialogue: vscode.DecorationOptions[] = [];
-  tokenlength = 0;
   parsedDocuments.get(document.uri.toString()).properties.titleKeys = [];
   var fontTokenExists = false;
-  if (output.title_page) {
-    while (tokenlength < output.title_page['hidden'].length) {
-      if (output.title_page['hidden'][tokenlength].type == "font" && output.title_page['hidden'][tokenlength].text.trim() != "") {
-        parsedDocuments.get(document.uri.toString()).properties.fontLine = output.title_page['hidden'][tokenlength].line;
-        var fontname = output.title_page['hidden'][tokenlength].text;
+
+  if (output.titlePage) {
+    while (tokenlength < output.titlePage['hidden'].length) {
+      if (output.titlePage['hidden'][tokenlength].type == "font" && output.titlePage['hidden'][tokenlength].text.trim() != "") {
+        parsedDocuments.get(document.uri.toString()).properties.fontLine = output.titlePage['hidden'][tokenlength].line;
+        var fontname = output.titlePage['hidden'][tokenlength].text;
         previewsToUpdate.forEach(p => {
           p.panel.webview.postMessage({ command: 'updateFont', content: fontname });
         });
@@ -285,6 +285,7 @@ export function parseDocument(document: TextDocument) {
       tokenlength++;
     }
   }
+
   if (!fontTokenExists && fontTokenExisted) {
     previewsToUpdate.forEach(p => {
       p.panel.webview.postMessage({ command: 'removeFont' });
@@ -292,6 +293,7 @@ export function parseDocument(document: TextDocument) {
     fontTokenExisted = false;
     diagnosticCollection.set(document.uri, []);
   }
+
   var editor = getEditor(document.uri);
   if (editor) editor.setDecorations(decortypesDialogue, decorsDialogue)
 

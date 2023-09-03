@@ -260,7 +260,7 @@ const writeSceneNumbers = (fullText: string) => {
 }
 
 /** Shifts scene/s at the selected text up or down */
-export const shiftScenes = (editor: vscode.TextEditor, parsed: parser.parseoutput, direction: number) => {
+export const shiftScenes = (editor: vscode.TextEditor, parsed: parser.Script, direction: number) => {
 
 	var numNewlinesAtEndRequired = 0;
 	const selectSceneAt = (sel: vscode.Selection): vscode.Selection => {
