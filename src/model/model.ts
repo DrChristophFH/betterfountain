@@ -40,8 +40,8 @@ class Scene {
 }
 
 class ScreenplayProperties {
-  sceneLines: ObservableArray<number>; // what is this?
-  sceneNames: ObservableArray<string>; // what is this?
+  sceneLines: ObservableArray<number>; // is this needed?
+  sceneNames: ObservableArray<string>; // is this needed?
   titleKeys: ObservableArray<string>; // what is this?
   firstTokenLine: ObservableValue<number>; // what is this?
   fontLine: ObservableValue<number>; // what is this?
@@ -62,5 +62,5 @@ export class Script {
   lengthAction: number; // ditch?
   lengthDialogue: number; // ditch?
   parseTime: number; // ditch?
-  properties: ObservableValue<ScreenplayProperties>;
+  properties: ScreenplayProperties;
 }

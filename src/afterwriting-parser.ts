@@ -106,7 +106,6 @@ export const titlePageDisplay: { [index: string]: titleKeywordFormat } = {
 
 interface LexerReplacements {
   [key: string]: string,
-  //image: string,
   link: string,
   note: string,
   line_break: string,
@@ -222,9 +221,9 @@ export function parse(original_script: string, cfg: any, generate_html: boolean)
     lengthActionSoFar = result.lengthAction;
     lengthDialogueSoFar = result.lengthDialogue;
 
-    if (result.properties.scenes.length > 0) {
-      result.properties.scenes[result.properties.scenes.length - 1].actionLength = action;
-      result.properties.scenes[result.properties.scenes.length - 1].dialogueLength = dialogue;
+    if (result.properties.get().scenes.get().length > 0) {
+      result.properties.get().scenes[result.properties.get().scenes.length - 1].actionLength = action;
+      result.properties.get().scenes[result.properties.get().scenes.length - 1].dialogueLength = dialogue;
     }
   }
 
@@ -233,7 +232,7 @@ export function parse(original_script: string, cfg: any, generate_html: boolean)
       if (depth <= 0) {
         return null;
       } else if (depth == 1) {
-        let lastItem: StructToken = last(result.properties.structure.filter(condition));
+        let lastItem: StructToken = last(result.properties.get().structure.filter(condition));
         return lastItem;
       } else {
         let prevSection = latestSectionOrScene(depth - 1, condition)
